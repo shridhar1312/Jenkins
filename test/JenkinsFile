@@ -6,9 +6,9 @@ pipeline {
         }
     }
     stages {
-        stage('Build') {
+        stage('Clone') {
             steps {
-                sh 'sleep 10'
+                sh 'git clone git@github.com:jmbharathram/SpringAPI.git'
             }
         }
     }

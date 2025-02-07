@@ -6,9 +6,9 @@ pipeline {
         }
     }
     stages {
-        stage('Clone') {
+        stage('Checkout') {
             steps {
-                sh 'git clone git@github.com:jmbharathram/SpringAPI.git'
+                git url: 'git@github.com:jmbharathram/SpringAPI.git'
             }
         }
     }

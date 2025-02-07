@@ -15,16 +15,14 @@ pipeline {
         }
         stage('Cleanup') {
             steps {
-                script {
-                    def targetDir = new File('SpringAPI/target')
-                    if (targetDir.exists()) {
-                        sh 'cd SpringAPI && rm -rf target'
-                        echo "Target directory removed."
-                    } else {
+                sh '''
+                    if [ -d "SpringAPI/target" ]; then
+                        echo "Target directory exists. Removing it..."
+                        rm -rf SpringAPI/target
+                    else
                         echo "Target directory does not exist. No action taken."
-                    }
-                }
-            }
+                    fi
+                '''
         }
         stage('Build and Test') {
             steps {

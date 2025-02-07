@@ -13,6 +13,19 @@ pipeline {
                     credentialsId: 'git-ssh-cred'
             }
         }
+        stage('Cleanup') {
+            steps {
+                script {
+                    def targetDir = new File('SpringAPI/target')
+                    if (targetDir.exists()) {
+                        sh 'cd SpringAPI && rm -rf target'
+                        echo "Target directory removed."
+                    } else {
+                        echo "Target directory does not exist. No action taken."
+                    }
+                }
+            }
+        }
         stage('Build and Test') {
             steps {
                sh 'ls -ltr'
@@ -33,11 +46,6 @@ pipeline {
                       dockerImage.push()
                   }
               }
-            }
-        }
-        stage('Cleanup') {
-            steps {
-               sh 'cd SpringAPI && rm -rf target'
             }
         }
     }

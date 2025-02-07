@@ -8,7 +8,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git url: 'git@github.com:jmbharathram/SpringAPI.git',
+                git url: 'git@github.com:jmbharathram/SampleJavaApps.git',
                     branch: 'main',
                     credentialsId: 'git-ssh-cred'
             }

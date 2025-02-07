@@ -16,7 +16,7 @@ pipeline {
         stage('Build and Test') {
             steps {
                sh 'ls -ltr'
-               sh 'cd SpringAPI && sudo mvn clean package'
+               sh 'cd SpringAPI && /usr/bin/sudo mvn clean package'
             }
         }
         stage('Build and Push Docker Image') {

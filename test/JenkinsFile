@@ -17,6 +17,12 @@ pipeline {
             steps {
                sh 'ls -ltr'
                sh 'hostname'
+               sh 'cd SpringAPI && mvn clean package'
+            }
+        }
+        stage('Cleanup') {
+            steps {
+               sh 'cd SpringAPI && rm -rf target'
             }
         }
     }

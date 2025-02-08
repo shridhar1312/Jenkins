@@ -6,13 +6,6 @@ pipeline {
         }
     }
     stages {
-        stage('Checkout') {
-            steps {
-                git url: 'git@github.com:jmbharathram/SampleJavaApps.git',
-                    branch: 'main',
-                    credentialsId: 'git-ssh-cred'
-            }
-        }
         stage('Cleanup') {
             steps {
                 sh '''
@@ -23,6 +16,13 @@ pipeline {
                         echo "Target directory does not exist. No action taken."
                     fi
                 '''
+            }
+        }
+        stage('Checkout') {
+            steps {
+                git url: 'git@github.com:jmbharathram/SampleJavaApps.git',
+                    branch: 'main',
+                    credentialsId: 'git-ssh-cred'
             }
         }
         stage('Build and Test') {

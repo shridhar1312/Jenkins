@@ -1,18 +1,6 @@
 pipeline {
     agent any
     stages {
-        stage('Cleanup') {
-            steps {
-                sh '''
-                    if [ -d "SpringAPI/target" ]; then
-                        echo "Target directory exists. Removing it..."
-                        rm -rf SpringAPI/target
-                    else
-                        echo "Target directory does not exist. No action taken."
-                    fi
-                '''
-            }
-        }
         stage('Checkout') {
             steps {
                 git url: 'git@github.com:jmbharathram/SampleJavaApps.git',
@@ -20,7 +8,7 @@ pipeline {
                     credentialsId: 'git-ssh-cred'
             }
         }
-        stage('Build and Test') {
+        stage('Build') {
             steps {
                sh 'ls -ltr'
                sh 'hostname'
@@ -53,7 +41,7 @@ pipeline {
                     sh """
                     git config --global user.email "abc@example.com"
                     git config --global user.name "abc"
-                    git add .
+                    git add SpringAPI/appchart
                     git commit -m "Automated commit from Jenkins"
                     git push git@github.com:jmbharathram/SampleJavaApps.git main
                     """

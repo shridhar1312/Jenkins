@@ -1,10 +1,5 @@
 pipeline {
-    agent {
-        docker {
-            image 'jmbharathram/my-jenkins-docker-agent:2'
-            args '--user root -v /var/run/docker.sock:/var/run/docker.sock'
-        }
-    }
+    agent any
     stages {
         stage('Cleanup') {
             steps {

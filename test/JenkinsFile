@@ -30,6 +30,18 @@ pipeline {
               }
             }
         }
+        stage('Cleanup') {
+            steps {
+                sh '''
+                    if [ -d "SpringAPI/target" ]; then
+                        echo "Target directory exists. Removing it..."
+                        rm -rf SpringAPI/target
+                    else
+                        echo "Target directory does not exist. No action taken."
+                    fi
+                '''
+            }
+        }
         stage ("Helm Image Update") {
             steps {
                     sh "cd SpringAPI && helm template rel-version-${BUILD_NUMBER} appchart --set image.tag=${BUILD_NUMBER}"

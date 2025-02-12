@@ -1,6 +1,18 @@
 pipeline {
     agent any
     stages {
+        stage('Cleanup') {
+            steps {
+                sh '''
+                    if [ -d "SpringAPI/target" ]; then
+                        echo "Target directory exists. Removing it..."
+                        rm -rf SpringAPI/target
+                    else
+                        echo "Target directory does not exist. No action taken."
+                    fi
+                '''
+            }
+        }
         stage('Checkout') {
             steps {
                 git url: 'git@github.com:jmbharathram/SampleJavaApps.git',
@@ -30,31 +42,17 @@ pipeline {
               }
             }
         }
-        stage('Cleanup') {
-            steps {
-                sh '''
-                    if [ -d "SpringAPI/target" ]; then
-                        echo "Target directory exists. Removing it..."
-                        rm -rf SpringAPI/target
-                    else
-                        echo "Target directory does not exist. No action taken."
-                    fi
-                '''
-            }
-        }
-        stage ("Helm Image Update") {
-            steps {
-                    sh "cd SpringAPI && helm template rel-version-${BUILD_NUMBER} appchart --set image.tag=${BUILD_NUMBER}"
-            }
-        }
-        stage('Commit and Push Changes') {
+        stage('Update Image') {
             steps {
                 script {
                     sh """
                     git config --global user.email "abc@example.com"
-                    git config --global user.name "abc"
-                    git add SpringAPI/appchart
-                    git commit -m "Automated commit from Jenkins"
+                    git config --global user.name "jmbharathram"
+                    cd SpringAPI/Manifests/
+                    sed -i 's,jmbharathram/springapi.*,jmbharathram/springapi:${BUILD_NUMBER},g' deployment.yaml
+                    cat deployment.yaml
+                    git add deployment.yaml
+                    git commit -m "Image updated by Jenkins CI pipeline"
                     git push git@github.com:jmbharathram/SampleJavaApps.git main
                     """
                 }

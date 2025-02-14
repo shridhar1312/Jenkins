@@ -1,23 +1,16 @@
 pipeline {
     agent any
     stages {
-        stage('Cleanup') {
-            steps {
-                sh '''
-                    if [ -d "SpringAPI/target" ]; then
-                        echo "Target directory exists. Removing it..."
-                        rm -rf SpringAPI/target
-                    else
-                        echo "Target directory does not exist. No action taken."
-                    fi
-                '''
-            }
-        }
         stage('Checkout') {
             steps {
                 git url: 'git@github.com:jmbharathram/SampleJavaApps.git',
                     branch: 'main',
                     credentialsId: 'git-ssh-cred'
+                dir('MyJenkins') {
+                    git url: 'git@github.com:jmbharathram/Jenkins.git',
+                        branch: 'main',
+                        credentialsId: 'git-ssh-cred'
+                }
             }
         }
         stage('Build') {
@@ -46,14 +39,14 @@ pipeline {
             steps {
                 script {
                     sh """
-                    git config --global user.email "abc@example.com"
-                    git config --global user.name "jmbharathram"
-                    cd SpringAPI/Manifests/
+                    git config --global user.email "executeoncommand@gmail.com"
+                    git config --global user.name "Bharath Ram"
+                    cd Manifests/
                     sed -i 's,jmbharathram/springapi.*,jmbharathram/springapi:${BUILD_NUMBER},g' deployment.yaml
                     cat deployment.yaml
                     git add deployment.yaml
                     git commit -m "Image updated by Jenkins CI pipeline"
-                    git push git@github.com:jmbharathram/SampleJavaApps.git main
+                    git push git@github.com:jmbharathram/Jenkins.git main
                     """
                 }
             }

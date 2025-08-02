@@ -17,7 +17,7 @@ spec:
         app: springapi
     spec:
       containers:
-        - image: jmbharathram/springapi:25
+        - image: jmbharathram/springapi:29
           name: springapi
           resources: {}
 status: {}
